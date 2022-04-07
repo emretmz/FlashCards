@@ -138,19 +138,19 @@ class Get_GamePage(QWidget, Ui_widget_game):
                 self.vocab_list=self.df[self.df['Unnamed: 0']==f'Level{self.df_level}']['English']
                 print(self.woorden_lijst )
 
-                #her listeye gore counter update etme
+                #it adjust the counter according to length of the list 
                 c=self.df[self.df['Unnamed: 0']==f'Level{self.df_level}']['English'].index                
                 self.counter=c[0]
 
-                #cevaplanmayan kelimelerin listesi
+                #unknown vocaabulary
                 self.unknown_words=[]
 
-                #beyaz buton baslama isareti
+                #white button sign
                 self.flag=True
 
         #other functions        
         def update_background(self):
-                #beyaz butonlara renk verdiren kisim
+                #it makes white buttons colorful
                 if self.flag:
 
                         self.button_ok.setStyleSheet("background-color: white;")
@@ -164,12 +164,12 @@ class Get_GamePage(QWidget, Ui_widget_game):
    
         def configureButton(self, button, begin, duration):
 
-                end = begin.addSecs(duration)#duration: configuration toplam calisma suresi
+                end = begin.addSecs(duration)#duration: configuration total duration
               
                 now = QTime.currentTime()
                 button.setEnabled(begin <= now <= end)
 
-              #3 saniye bittigi zaman calisan kisim
+              #This part works after 3 secs are finished
                 if now < begin: 
                         self.update_background()
 
@@ -187,7 +187,7 @@ class Get_GamePage(QWidget, Ui_widget_game):
                         QTimer.singleShot(
                                 now.msecsTo(begin),lambda: self.label_language.setText(change_title))   
 
-                #3 saniye tekrar basladigi zaman calisan kisim/butonlari inaktif eder               
+                #This part works when 3 sec begins again / deactivate butons           
                 if now < end:
                         self.update_background()
                         QTimer.singleShot(
@@ -196,8 +196,8 @@ class Get_GamePage(QWidget, Ui_widget_game):
 
         def activateButton(self):
                 #set 3 seconds to activate button_ok 
-                begin = QTime.currentTime().addSecs(1)#baslangic suresini 3 sn oteleyerek calisir
-                self.configureButton(self.button_ok, begin, 120)#her buton aktiflestiginde total sure 120 sn olarak belirlenir
+                begin = QTime.currentTime().addSecs(1)#delay the begin time 3 sec
+                self.configureButton(self.button_ok, begin, 120)#every activating has 120 sec total duration to keep in activate
                 #set 3 seconds to activate button_cancel
                 begin = QTime.currentTime().addSecs(1)
                 self.configureButton(self.button_cancel, begin, 120)
@@ -212,10 +212,10 @@ class Get_GamePage(QWidget, Ui_widget_game):
                         #activate the buttons with timer
                         self.activateButton()
                         
-                        #test amacli yazdir
+                        #test 
                         print(self.woorden_lijst[self.counter])   
                                 
-                        #oyunu calistir/ekrana kelime basar
+                        #run the game/print word on the screen
                         my_word=self.woorden_lijst[self.counter]
                         self.label_word.setText(my_word)
 
@@ -227,7 +227,7 @@ class Get_GamePage(QWidget, Ui_widget_game):
                         self.counter +=1
 
                 except KeyError:
-                        #Daha sonra back tusu active edilebilir
+                        #Later we can add a back button
                         print("Key Error Olustu")
                         self.label_word.setText("KLAAR")
                         print(self.unknown_words)
@@ -250,15 +250,15 @@ class Get_GamePage(QWidget, Ui_widget_game):
                         json.dump(data, f )
                         f.truncate() 
 
-        #sistemi calistiran method
+        #game works with this method
         def my_word(self):
                 #call the flashcard function
                 self.flashcard() 
 
-        #liste guncelle (bilinmeyen kelime listesi)
+        #update list(unknown vocabulary list)
         def last_list(self):
                 pass
-        #counter guncelle
+        #update counter 
         def last_counter(self):
                 pass        
 
